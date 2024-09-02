@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Soil Type - Stero Sonic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+        }
+        .section {
+            background: #fff;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .dropdown {
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .arrow-btn {
+            display: block;
+            margin: 20px auto;
+            font-size: 24px;
+            text-decoration: none;
+            text-align: center;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .success-message {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            display: none;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Soil Type Selection -->
+        <div class="section">
+            <h2>Select Soil Type</h2>
+            <div class="dropdown">
+                <label for="soilSelect">Choose a soil type:</label>
+                <select id="soilSelect">
+                    <option value="clay">Clay</option>
+                    <option value="sandy">Sandy</option>
+                    <option value="silty">Silty</option>
+                    <option value="loamy">Loamy</option>
+                    <option value="peaty">Peaty</option>
+                    <option value="chalky">Chalky</option>
+                </select>
+            </div>
+            <button class="btn" onclick="pairIoT()">Pair IoT</button>
+            <div id="pairSuccess" class="success-message">Paired successfully!</div>
+        </div>
+
+        <!-- Fetch Results Button -->
+        <div class="section">
+            <button class="btn" onclick="fetchData()">Fetch Results</button>
+            <div id="fetchSuccess" class="success-message">Fetched successfully!</div>
+            <div id="sensorData" style="display:none;">
+                <h3>Real-time Sensor Data</h3>
+                <p>Nitrogen: <span id="sensorNitrogen">65 kg/ha</span></p>
+                <p>Phosphorus: <span id="sensorPhosphorus">45 kg/ha</span></p>
+                <p>Potassium: <span id="sensorPotassium">70 kg/ha</span></p>
+                <p>Moisture Level: <span id="sensorMoisture">28%</span></p>
+            </div>
+        </div>
+
+        <!-- Get Suggestions Button -->
+        <div class="section">
+            <button class="btn" onclick="getSuggestions()">Get Suggestions</button>
+            <table id="suggestionsTable">
+                <tr>
+                    <th>Crop</th>
+                    <th>Suitability</th>
+                </tr>
+                <tr>
+                    <td>Wheat</td>
+                    <td id="wheatSuitability">-</td>
+                </tr>
+                <tr>
+                    <td>Corn</td>
+                    <td id="cornSuitability">-</td>
+                </tr>
+                <tr>
+                    <td>Rice</td>
+                    <td id="riceSuitability">-</td>
+                </tr>
+                <!-- Add more crops as needed -->
+            </table>
+        </div>
+
+        <!-- Navigate to Home Page -->
+        <div class="section">
+            <a href="home.html" class="arrow-btn">→</a>
+        </div>
+        
+    </div>
+
+    <script>
+        function pairIoT() {
+            // Simulate IoT pairing
+            document.getElementById("pairSuccess").style.display = "block";
+        }
+
+        function fetchData() {
+            // Simulate fetching data
+            document.getElementById("fetchSuccess").style.display = "block";
+            document.getElementById("sensorData").style.display = "block";
+        }
+
+        function getSuggestions() {
+            // Simulate getting suggestions
+            var soilType = document.getElementById("soilSelect").value;
+            var nitrogen = document.getElementById("sensorNitrogen").innerText;
+            var phosphorus = document.getElementById("sensorPhosphorus").innerText;
+            var potassium = document.getElementById("sensorPotassium").innerText;
+            var moisture = document.getElementById("sensorMoisture").innerText;
+
+            // Simple logic to determine crop suitability based on soil type and sensor data
+            document.getElementById("wheatSuitability").innerText = (soilType === "loamy" && moisture > "25%") ? "High" : "Medium";
+            document.getElementById("cornSuitability").innerText = (soilType === "sandy" && moisture > "30%") ? "High" : "Low";
+            document.getElementById("riceSuitability").innerText = (soilType === "clay" && moisture > "40%") ? "High" : "Medium";
+
+            // Display the suggestions table
+            document.getElementById("suggestionsTable").style.display = "table";
+        }
+    </script>
+
+</body>
+</html>
