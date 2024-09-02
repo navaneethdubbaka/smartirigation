@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluetooth Control - Stero Sonic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+        }
+        .section {
+            background: #fff;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .success-message {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Pair IoT Button -->
+        <div class="section">
+            <h2>Bluetooth Control</h2>
+            <button class="btn" onclick="pairIoT()">Pair IoT</button>
+            <div id="pairSuccess" class="success-message">Paired successfully!</div>
+        </div>
+
+        <!-- Fetch Data Button -->
+        <div class="section">
+            <button class="btn" onclick="fetchData()">Fetch Data</button>
+            <div id="fetchSuccess" class="success-message">Fetched successfully!</div>
+            <div id="sensorData" style="display:none;">
+                <h3>Real-time Sensor Data</h3>
+                <p>Nitrogen: <span id="sensorNitrogen">65 kg/ha</span></p>
+                <p>Phosphorus: <span id="sensorPhosphorus">45 kg/ha</span></p>
+                <p>Potassium: <span id="sensorPotassium">70 kg/ha</span></p>
+                <p>Moisture Level: <span id="sensorMoisture">28%</span></p>
+            </div>
+        </div>
+
+        <!-- Stage Selection and Update Section -->
+        <div class="section">
+            <h2>Update Moisture Level</h2>
+            <div class="dropdown">
+                <label for="stageSelect">Choose the stage:</label>
+                <select id="stageSelect">
+                    <!-- Stages will be dynamically populated based on crop selection -->
+                </select>
+            </div>
+            <button class="btn" onclick="updateMoisture()">Update</button>
+            <div id="updatedMoisture" class="success-message">Moisture level updated!</div>
+            <div id="newValues" style="display:none;">
+                <h3>Updated Moisture Level Based on Stage</h3>
+                <p>Moisture Level: <span id="updatedMoistureValue">-</span></p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        function pairIoT() {
+            // Simulate IoT pairing
+            document.getElementById("pairSuccess").style.display = "block";
+        }
+
+        function fetchData() {
+            // Simulate fetching data
+            document.getElementById("fetchSuccess").style.display = "block";
+            document.getElementById("sensorData").style.display = "block";
+        }
+
+        function updateMoisture() {
+            // Simulate moisture update
+            document.getElementById("updatedMoisture").style.display = "block";
+            document.getElementById("newValues").style.display = "block";
+            
+            // Get the selected stage and update moisture level
+            var selectedStage = JSON.parse(document.getElementById("stageSelect").value);
+            var newMoistureLevel = selectedStage.waterLevel; // Assuming waterLevel represents the moisture level
+            document.getElementById("updatedMoistureValue").innerText = newMoistureLevel;
+        }
+
+        function updateStages() {
+            var stageSelect = document.getElementById("stageSelect");
+            stageSelect.innerHTML = ""; // Clear existing options
+
+            // Example stages (these can be updated dynamically based on the crop)
+            addStageOption("Germination", "10-15 days", "30%");
+            addStageOption("Vegetative", "25-35 days", "50%");
+            addStageOption("Reproductive", "20-30 days", "70%");
+            addStageOption("Maturity", "15-20 days", "40%");
+        }
+
+        function addStageOption(stage, duration, waterLevel) {
+            var option = document.createElement("option");
+            option.value = JSON.stringify({ duration: duration, waterLevel: waterLevel });
+            option.text = stage;
+            document.getElementById("stageSelect").appendChild(option);
+        }
+
+        // Initialize the stage selection on page load
+        window.onload = updateStages;
+    </script>
+
+</body>
+</html>
