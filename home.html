@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stero Sonic - Smart Irrigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px;
+        }
+        .section {
+            background: #fff;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .dropdown {
+            margin-bottom: 20px;
+        }
+        .data-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border-radius: 5px;
+        }
+        .data-box div {
+            flex: 1;
+            text-align: center;
+        }
+        .btn-bluetooth {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Stero Sonic - Smart Irrigation</h1>
+    </header>
+
+    <div class="background-image">
+        <h2>Welcome to Stero Sonic - Precision Farming Solution</h2>
+    </div>
+
+    <div class="container">
+        
+        <!-- Crop Selection Section -->
+        <div class="section">
+            <h2>Select Crop</h2>
+            <div class="dropdown">
+                <label for="cropSelect">Choose a crop:</label>
+                <select id="cropSelect" onchange="updateStages()">
+                    <option value="wheat">Wheat</option>
+                    <option value="corn">Corn</option>
+                    <option value="rice">Rice</option>
+                    <!-- Add more crops as needed -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Stage Selection Section -->
+        <div class="section">
+            <h2>Select Growth Stage</h2>
+            <div class="dropdown">
+                <label for="stageSelect">Choose the stage:</label>
+                <select id="stageSelect" onchange="updateStageInfo()">
+                    <!-- Stages will be dynamically populated based on crop selection -->
+                </select>
+            </div>
+            <div id="stageInfo">
+                <h3>Stage Information</h3>
+                <p>Duration: <span id="stageDuration">30 days</span></p>
+                <p>Required Water Level: <span id="requiredWaterLevel">500 mm</span></p>
+            </div>
+        </div>
+
+        <!-- NPK and Moisture Levels Section -->
+        <div class="section">
+            <h2>Required NPK & Moisture Levels</h2>
+            <div id="npkMoistureValues">
+                <p>Nitrogen: <span id="requiredNitrogen">60-120 kg/ha</span></p>
+                <p>Phosphorus: <span id="requiredPhosphorus">30-60 kg/ha</span></p>
+                <p>Potassium: <span id="requiredPotassium">40-80 kg/ha</span></p>
+                <p>Moisture Level: <span id="requiredMoisture">20-30%</span></p>
+            </div>
+        </div>
+
+        <!-- Weather Report Section -->
+        <div class="section">
+            <h2>Weekly Weather Report</h2>
+            <div id="weatherReport">
+                <p>Monday: 30% chance of rain</p>
+                <p>Tuesday: Sunny, no rain</p>
+                <p>Wednesday: 60% chance of rain</p>
+                <!-- Add more days as needed -->
+            </div>
+        </div>
+
+        <!-- Sensor Data Display Section -->
+        <div class="section">
+            <h2>Real-time Sensor Data</h2>
+            <div class="data-box">
+                <div>
+                    <h4>Soil Moisture Level</h4>
+                    <p id="currentMoisture">28%</p>
+                </div>
+                <div>
+                    <h4>Nitrogen</h4>
+                    <p id="currentNitrogen">65 kg/ha</p>
+                </div>
+                <div>
+                    <h4>Phosphorus</h4>
+                    <p id="currentPhosphorus">45 kg/ha</p>
+                </div>
+                <div>
+                    <h4>Potassium</h4>
+                    <p id="currentPotassium">70 kg/ha</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fertilizer Recommendation Tab -->
+        <div class="section">
+            <h2>Fertilizer Recommendations</h2>
+            <p>Based on the NPK values, we recommend the following:</p>
+            <p id="fertilizerRecommendation">Use Urea (46-0-0) at 54 kg/ha for Nitrogen deficit.</p>
+        </div>
+        <!-- Bluetooth Control Button -->
+        <div class="section">
+            <a href="bluetooth_control.html" class="btn-bluetooth">Bluetooth Control</a>
+        </div>
+        
+    </div>
+        
+    
+
+
+    <script>
+        function updateStages() {
+            var crop = document.getElementById("cropSelect").value;
+            var stageSelect = document.getElementById("stageSelect");
+            stageSelect.innerHTML = ""; // Clear existing options
+
+            if (crop === "wheat") {
+                addStageOption("Germination", "10-15 days", "200 mm");
+                addStageOption("Vegetative", "25-35 days", "500 mm");
+                addStageOption("Reproductive", "20-30 days", "600 mm");
+                addStageOption("Maturity", "15-20 days", "300 mm");
+            } else if (crop === "corn") {
+                addStageOption("Germination", "7-12 days", "250 mm");
+                addStageOption("Vegetative", "30-40 days", "700 mm");
+                addStageOption("Reproductive", "25-35 days", "800 mm");
+                addStageOption("Maturity", "20-30 days", "400 mm");
+            } else if (crop === "rice") {
+                addStageOption("Germination", "10-12 days", "220 mm");
+                addStageOption("Vegetative", "30-40 days", "600 mm");
+                addStageOption("Reproductive", "20-30 days", "700 mm");
+                addStageOption("Maturity", "15-25 days", "350 mm");
+            }
+            
+            // Update stage info for the first stage by default
+            updateStageInfo();
+        }
+
+        function addStageOption(stage, duration, waterLevel) {
+            var option = document.createElement("option");
+            option.value = JSON.stringify({ duration: duration, waterLevel: waterLevel });
+            option.text = stage;
+            document.getElementById("stageSelect").appendChild(option);
+        }
+
+        function updateStageInfo() {
+            var stageInfo = JSON.parse(document.getElementById("stageSelect").value);
+            document.getElementById("stageDuration").innerText = stageInfo.duration;
+            document.getElementById("requiredWaterLevel").innerText = stageInfo.waterLevel;
+        }
+
+        function updateValues() {
+            var crop = document.getElementById("cropSelect").value;
+            var nitrogen, phosphorus, potassium, moisture;
+
+            if (crop === "wheat") {
+                nitrogen = "60-120 kg/ha";
+                phosphorus = "30-60 kg/ha";
+                potassium = "40-80 kg/ha";
+                moisture = "20-30%";
+            } else if (crop === "corn") {
+                nitrogen = "120-150 kg/ha";
+                phosphorus = "50-70 kg/ha";
+                potassium = "80-100 kg/ha";
+                moisture = "25-35%";
+            } else if (crop === "rice") {
+                nitrogen = "90-120 kg/ha";
+                phosphorus = "30-50 kg/ha";
+                potassium = "60-90 kg/ha";
+                moisture = "30-40%";
+            }
+
+            document.getElementById("requiredNitrogen").innerText = nitrogen;
+            document.getElementById("requiredPhosphorus").innerText = phosphorus;
+            document.getElementById("requiredPotassium").innerText = potassium;
+            document.getElementById("requiredMoisture").innerText = moisture;
+
+            // Update stage options based on crop
+            updateStages();
+        }
+
+        // Initialize the first stage information
+        window.onload = updateValues;
+    </script>
+
+</body>
+</html>
